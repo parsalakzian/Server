@@ -8,7 +8,6 @@ SERVICE_NAME="ominiserver-run"
 SERVICE_PATH="/etc/systemd/system/$SERVICE_NAME.service"
 TIMER_PATH="/etc/systemd/system/$SERVICE_NAME.timer"
 
-# کلون پروژه
 if [ ! -d "$TARGET_DIR" ]; then
     echo "📦 Project not found. Cloning..."
     git clone "$REPO_URL" "$TARGET_DIR"
@@ -21,7 +20,6 @@ else
     echo "✅ Project already exists."
 fi
 
-# محتویات فایل سرویس
 SERVICE_CONTENT="[Unit]
 Description=OminiServer Auto-Deploy Service
 
@@ -32,7 +30,6 @@ ExecStart=$DEPLOY_SCRIPT
 WorkingDirectory=$TARGET_DIR
 "
 
-# محتویات فایل تایمر
 TIMER_CONTENT="[Unit]
 Description=Run OminiServer Deploy Script every 2 minutes
 
@@ -45,7 +42,6 @@ Unit=$SERVICE_NAME.service
 WantedBy=timers.target
 "
 
-# تابع آپدیت فایل فقط در صورت تغییر
 update_if_changed() {
     local path="$1"
     local content="$2"
@@ -60,12 +56,10 @@ update_if_changed() {
     fi
 }
 
-# به‌روزرسانی فایل‌ها
 changed=0
 update_if_changed "$SERVICE_PATH" "$SERVICE_CONTENT" && changed=1
 update_if_changed "$TIMER_PATH" "$TIMER_CONTENT" && changed=1
 
-# بارگذاری مجدد systemd در صورت نیاز
 if [ "$changed" -eq 1 ]; then
     echo "🔄 Reloading and restarting systemd units..."
     sudo systemctl daemon-reload
