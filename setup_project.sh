@@ -1,6 +1,6 @@
 #!/bin/bash
 
-REPO_URL="https://github.com/parsalakzian/OminiServer.git"
+REPO_URL="git@github.com:parsalakzian/OminiServer.git"
 PROJECT_NAME="OminiServer"
 TARGET_DIR="/home/$PROJECT_NAME"
 DEPLOY_SCRIPT="$TARGET_DIR/run.sh"
